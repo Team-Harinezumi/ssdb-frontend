@@ -1,13 +1,18 @@
 import axios from 'axios'
+import csvtojson from 'csvtojson'
 import { isGssUrl, createGssCsvUrl } from '../lib/gss_url'
 
-// csv形式でGSSのデータを取ってくる
+// GSSのデータを取ってくる
 export const fetchGss = async (url: string) => {
   try {
     if (isGssUrl(url)) {
       const adjustedUrl = createGssCsvUrl(url)
       const res = await axios.get(adjustedUrl)
-      return res.data
+      return csvtojson({
+        noheader: true,
+        output: "csv"
+      })
+      .fromString(res.data)
     }
     return ''
   } catch(e) {
