@@ -1,36 +1,12 @@
 import { NextPage } from "next";
+import { fetchGss } from "../../api/fetch_gss";
+import { useState, useEffect } from "react";
+import { filteredData } from "../../lib/filter_row";
 
-const testData = [
-  [
-    "Name",
-    "Debut date",
-    "Birthday",
-    "Height",
-    "Fanbase name",
-    "Illustrator",
-    "Twitter",
-  ],
-  [
-    "Mori Calliope",
-    "September 12, 2020",
-    "April 4th",
-    "167 cm",
-    "",
-    "Yukisame",
-    "https://twitter.com/moricalliope",
-  ],
-  [
-    "Takanashi Kiara",
-    "September 12, 2020",
-    "July 6th",
-    "165 cm",
-    "",
-    "huke",
-    "https://twitter.com/takanashikiara",
-  ],
-];
+const url =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vSDSvWQNtJMW5IUsLF6FP12PNt8nSqaqw554UiNnUEYAZlWSp7PU509-M2IJ96D72gpCJznDvyied57/pubhtml";
 
-type RowOfSpreadSheet = {
+export type RowOfSpreadSheet = {
   data: {
     [header: string]: string;
   };
@@ -43,8 +19,9 @@ type Props = {
   rawData: string[][];
 };
 
-const SpreadSheetTable: NextPage<Props> = ({ rawData = testData }) => {
+const SpreadSheetTable: NextPage<Props> = ({ rawData = [] }) => {
   // 生のデータ(string[][])をRowOfSpreadSheet[]に整形
+  rawData.shift(); // FOR TEST: 魔法のスプレッドシートは2行目から情報がはじまるため、テスト用に暫定的にこれで
   const headers = rawData[0];
   rawData.shift();
 
@@ -71,10 +48,19 @@ const SpreadSheetTable: NextPage<Props> = ({ rawData = testData }) => {
       return <td>{row.data[header]}</td>;
     });
 
-  // 表にして表示、この時row.options.shownがtrueである必要がある
+  // row.options.shownがtrueである行を表にしてまとめて表示
   const shownRows = formattedData.map((row) => {
     return row.options.shown ? <tr>{singleRow(row)}</tr> : <></>;
   });
+
+  /*
+  // filteredDataのテスト
+  const shownRows = filteredData("会社(A→Z)", "Amazon", formattedData).map(
+    (row) => {
+      return row.options.shown ? <tr>{singleRow(row)}</tr> : <></>;
+    }
+  );
+  */
 
   return (
     <>
@@ -88,4 +74,18 @@ const SpreadSheetTable: NextPage<Props> = ({ rawData = testData }) => {
   );
 };
 
-export default SpreadSheetTable;
+const EnhancedSpreadSheetTable: NextPage = () => {
+  // sheetの初期値を[]にするとuseEffect前のレンダリングでheadersがundefinedになってバグる
+  const [sheet, setSheet] = useState<string[][]>([["hoge"], [""]]);
+  useEffect(() => {
+    const gss = async () => {
+      const fetchedGss = await fetchGss(url);
+      setSheet(fetchedGss as string[][]);
+    };
+    gss();
+  }, []);
+
+  return <SpreadSheetTable rawData={sheet} />;
+};
+
+export default EnhancedSpreadSheetTable;
