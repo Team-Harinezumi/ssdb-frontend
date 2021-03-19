@@ -5,6 +5,8 @@ export const filteredData = (
   input: string,
   spreadsheetData: RowOfSpreadSheet[]
 ): RowOfSpreadSheet[] => {
+  if (input === "") return spreadsheetData;
+
   return spreadsheetData.map((row) => {
     return { ...row, options: { shown: row.data[header].includes(input) } };
   });
