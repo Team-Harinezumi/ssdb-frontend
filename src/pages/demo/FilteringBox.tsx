@@ -1,61 +1,72 @@
 import { NextPage } from "next";
 import { useState, useEffect } from "react";
 import ShowFilteredData from "./ShowFilteredData";
-import { fetchGss } from "../../api/fetch_gss";
+import { formattedData } from "../../lib/rawdata_to_formatted";
 import type { RowOfSpreadSheet } from "./ShowFilteredData";
 
 type props = {
-  url: string;
+  rawData: string[][];
 };
 
-const FilteringBox: NextPage<props> = ({ url = "" }) => {
-  // データ取得のAPIを叩いてデータを取得 string[][]
-  // sheetの初期値を[]にするとuseEffect前のレンダリングでheadersがundefinedになってバグる
-  const [sheet, setSheet] = useState<string[][]>([[""], [""]]);
+const FilteringBox: NextPage<props> = ({ rawData = [[""], [""]] }) => {
+  // ユーザの入力
+  const [inputs, setInputs] = useState<{ [key: string]: string }>({});
+  // 表示するデータ
+  const [data, setData] = useState<RowOfSpreadSheet[]>([]);
+
+  // rawDataの内容が変わったら(検索ボタンが押されたら)ヘッダとデータをリセット
+  const { headers } = formattedData(rawData);
   useEffect(() => {
-    const gss = async () => {
-      const fetchedGss = await fetchGss(url);
-      setSheet(fetchedGss as string[][]);
-    };
-    gss();
-  }, []);
+    setData(formattedData(rawData).data);
+  }, [rawData]);
 
-  // 生のデータ(string[][])をRowOfSpreadSheet[]に整形 -> 切り出してlibに入れてもいいかも
-  sheet.shift(); // FOR TEST: 魔法のスプレッドシートは2行目から情報がはじまるため、テスト用に暫定的にこれで
-  const headers = sheet[0];
-  sheet.shift();
-
-  const formattedData = sheet.map((row) => {
-    let formattedRow: RowOfSpreadSheet = {
-      data: {},
-      options: {
-        shown: true,
-      },
-    };
-    headers.forEach(
-      (header, index) => (formattedRow.data[header] = row[index])
-    );
-
-    return formattedRow;
-  });
-  // 切り出すならここまで
+  // 絞り込み用テキストボックスの変更とデータをバインド
+  const handleChange = (
+    event: React.ChangeEvent<{ name: unknown; value: unknown }>
+  ) => {
+    setInputs({
+      ...inputs,
+      [event.target.name as string]: event.target.value as string,
+    });
+  };
 
   // 絞り込み用のテキストボックス
   const inputBoxs = headers.map((header) => {
     return (
       <td>
-        <input type="text" name={header} placeholder="絞り込み" />
+        <input
+          type="text"
+          name={header}
+          value={inputs.header}
+          placeholder="絞り込み"
+          onChange={handleChange}
+        />
       </td>
     );
   });
 
-  // TODO: ユーザ入力から絞り込んだ(options.shownを変えた)データをfilteredDataに渡す
+  // ユーザ入力から絞り込んだ(options.shownを変えた)データをdataに渡す
+  useEffect(() => {
+    setData(
+      data.map((row) => {
+        // flag 使わずに書きたい(forEach内はbreak出来ず、returnするとforEach内でcontinueのようになるだけ)
+        // for of とかで良さそう
+        let flag: boolean = true;
+        Object.keys(inputs).forEach((key) => {
+          if (inputs[key] && !row.data[key].includes(inputs[key])) {
+            flag = false;
+          }
+        });
+        return { ...row, options: { shown: flag } };
+      })
+    );
+  }, [inputs]);
 
   return (
     <table>
       <tbody>
         <tr>{inputBoxs}</tr>
-        <ShowFilteredData filteredData={formattedData} headers={headers} />
+        <ShowFilteredData filteredData={data} headers={headers} />
       </tbody>
     </table>
   );
