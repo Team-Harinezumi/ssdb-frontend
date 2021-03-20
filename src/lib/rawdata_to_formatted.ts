@@ -1,4 +1,4 @@
-import type { RowOfSpreadSheet } from "../pages/demo/ShowFilteredData";
+import type { RowOfSpreadSheet } from "@/models/RowOfSpreadSheet";
 
 export const formattedData = (
   tmpRawData: string[][]

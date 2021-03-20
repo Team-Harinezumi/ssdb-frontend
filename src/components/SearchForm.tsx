@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import { useState } from "react";
-import FilteringBox from "./FilteringBox";
-import { fetchGss } from "../../api/fetch_gss";
+import FilteringBox from "@/components/FilteringBox";
+import { fetchGss } from "@/api/fetch_gss";
 
 const SearchForm: NextPage = () => {
   // ユーザの入力とバインド

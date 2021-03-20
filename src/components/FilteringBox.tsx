@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import { useState, useEffect } from "react";
-import ShowFilteredData from "./ShowFilteredData";
-import { formattedData } from "../../lib/rawdata_to_formatted";
+import ShowFilteredData from "@/components/ShowFilteredData";
+import { formattedData } from "@/lib/rawdata_to_formatted";
 import type { RowOfSpreadSheet } from "@/models/RowOfSpreadSheet";
 
 type Props = {

@@ -1,4 +1,4 @@
-import type { RowOfSpreadSheet } from "../pages/templates/SpreadSheetTable";
+import type { RowOfSpreadSheet } from "@/models/RowOfSpreadSheet";
 
 export const filteredData = (
   header: string,
@@ -8,6 +8,6 @@ export const filteredData = (
   if (input === "") return spreadsheetData;
 
   return spreadsheetData.map((row) => {
-    return { ...row, options: { shown: row.data[header].includes(input) } };
+    return { ...row, options: { shown: row.data[header].includes(input), folded: true } };
   });
 };
