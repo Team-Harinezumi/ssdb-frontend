@@ -1,23 +1,14 @@
 import { NextPage } from "next";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { RowOfSpreadSheet } from "@/models/RowOfSpreadSheet";
 
-export type RowOfSpreadSheet = {
-  data: {
-    [header: string]: string;
-  };
-  options: {
-    shown: boolean;
-    folded: boolean;
-  };
-};
-
-type props = {
+type Props = {
   filteredData: RowOfSpreadSheet[];
   headers: string[];
 };
 
-const ShowFilteredData: NextPage<props> = ({
+const ShowFilteredData: NextPage<Props> = ({
   filteredData = [],
   headers = [""],
 }) => {
