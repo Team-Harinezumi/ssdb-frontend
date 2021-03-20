@@ -8,11 +8,18 @@ type props = {
   rawData: string[][];
 };
 
-const FilteringBox: NextPage<props> = ({ rawData = [[""], [""]] }) => {
+const FilteringBox: NextPage<props> = ({ rawData = [] }) => {
+  // 初期状態では何も描画しない
+  if (!rawData.length) {
+    return <></>;
+  }
+
   // ユーザの入力
   const [inputs, setInputs] = useState<{ [key: string]: string }>({});
   // 表示するデータ
-  const [data, setData] = useState<RowOfSpreadSheet[]>([]);
+  const [data, setData] = useState<RowOfSpreadSheet[]>(
+    formattedData(rawData).data
+  );
 
   // rawDataの内容が変わったら(検索ボタンが押されたら)ヘッダとデータをリセット
   const { headers } = formattedData(rawData);
@@ -49,15 +56,13 @@ const FilteringBox: NextPage<props> = ({ rawData = [[""], [""]] }) => {
   useEffect(() => {
     setData(
       data.map((row) => {
-        // flag 使わずに書きたい(forEach内はbreak出来ず、returnするとforEach内でcontinueのようになるだけ)
-        // for of とかで良さそう
-        let flag: boolean = true;
-        Object.keys(inputs).forEach((key) => {
+        for (const key of Object.keys(inputs)) {
           if (inputs[key] && !row.data[key].includes(inputs[key])) {
-            flag = false;
+            return { ...row, options: { shown: false } };
           }
-        });
-        return { ...row, options: { shown: flag } };
+        }
+
+        return { ...row, options: { shown: true } };
       })
     );
   }, [inputs]);
@@ -65,7 +70,10 @@ const FilteringBox: NextPage<props> = ({ rawData = [[""], [""]] }) => {
   return (
     <table>
       <tbody>
-        <tr>{inputBoxs}</tr>
+        <tr>
+          <td></td>
+          {inputBoxs}
+        </tr>
         <ShowFilteredData filteredData={data} headers={headers} />
       </tbody>
     </table>

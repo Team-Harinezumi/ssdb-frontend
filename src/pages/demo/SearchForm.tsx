@@ -9,7 +9,7 @@ const SearchForm: NextPage = () => {
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vSDSvWQNtJMW5IUsLF6FP12PNt8nSqaqw554UiNnUEYAZlWSp7PU509-M2IJ96D72gpCJznDvyied57/pubhtml"
   );
   // SSの整形前のデータ
-  const [sheet, setSheet] = useState<string[][]>([[""], [""]]);
+  const [sheet, setSheet] = useState<string[][]>([]);
 
   // ユーザの入力を取得
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
