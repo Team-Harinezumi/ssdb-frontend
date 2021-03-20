@@ -6,9 +6,10 @@ import type { RowOfSpreadSheet } from "@/models/RowOfSpreadSheet";
 
 type Props = {
   rawData: string[][];
+  headerIndex: number;
 };
 
-const FilteringBox: NextPage<Props> = ({ rawData = [] }) => {
+const FilteringBox: NextPage<Props> = ({ rawData = [], headerIndex = 1 }) => {
   // 初期状態では何も描画しない
   if (!rawData.length) {
     return <></>;
@@ -18,13 +19,13 @@ const FilteringBox: NextPage<Props> = ({ rawData = [] }) => {
   const [inputs, setInputs] = useState<{ [key: string]: string }>({});
   // 表示するデータ
   const [data, setData] = useState<RowOfSpreadSheet[]>(
-    formattedData(rawData).data
+    formattedData(rawData, headerIndex).data
   );
 
   // rawDataの内容が変わったら(検索ボタンが押されたら)ヘッダとデータをリセット
-  const { headers } = formattedData(rawData);
+  const { headers } = formattedData(rawData, headerIndex);
   useEffect(() => {
-    setData(formattedData(rawData).data);
+    setData(formattedData(rawData, headerIndex).data);
   }, [rawData]);
 
   // 絞り込み用テキストボックスの変更とデータをバインド

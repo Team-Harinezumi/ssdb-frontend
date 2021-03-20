@@ -1,7 +1,8 @@
 import type { RowOfSpreadSheet } from "@/models/RowOfSpreadSheet";
 
 export const formattedData = (
-  tmpRawData: string[][]
+  tmpRawData: string[][],
+  headerIndex: number
 ): {
   headers: string[];
   data: RowOfSpreadSheet[];
@@ -11,7 +12,7 @@ export const formattedData = (
   const rawData = clone(tmpRawData) as string[][];
 
   // 生のデータ(string[][])をRowOfSpreadSheet[]に整形
-  rawData.shift(); // FOR TEST: 魔法のスプレッドシートは2行目から情報がはじまるため、テスト用に暫定的にこれで
+  rawData.splice(0, headerIndex - 1);
   const headers = rawData[0];
   rawData.shift();
 
