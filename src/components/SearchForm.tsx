@@ -8,7 +8,10 @@ const SearchForm: NextPage = () => {
   const [inputUrl, setInputUrl] = useState(
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vSDSvWQNtJMW5IUsLF6FP12PNt8nSqaqw554UiNnUEYAZlWSp7PU509-M2IJ96D72gpCJznDvyied57/pubhtml"
   );
-  // ヘッダ行のインデックス
+  // ヘッダ行のインデックス(ユーザ入力)
+  const [inputIndex, setInputIndex] = useState(1);
+  // ヘッダ行のインデックス(次のコンポーネントに渡す)
+  // inputIndexと分けないとデータの表示中にボタンを触った時想定外の挙動
   const [headerIndex, setHeaderIndex] = useState(1);
   // SSの整形前のデータ
   const [sheet, setSheet] = useState<string[][]>([]);
@@ -19,12 +22,12 @@ const SearchForm: NextPage = () => {
   };
   // インデックスを1増やす
   const handleIncrement = () => {
-    setHeaderIndex((headerIndex) => headerIndex + 1);
+    setInputIndex((inputIndex) => inputIndex + 1);
   };
   // インデックスを1減らす
   const handleDecrement = () => {
-    if (headerIndex === 1) return;
-    setHeaderIndex((headerIndex) => headerIndex - 1);
+    if (inputIndex === 1) return;
+    setInputIndex((inputIndex) => inputIndex - 1);
   };
 
   // 検索ボタンを押すと入力したURLからSSが呼ばれ、シートを取得(未整形)
@@ -34,6 +37,7 @@ const SearchForm: NextPage = () => {
       setSheet(fetchedGss as string[][]);
     };
     gss();
+    setHeaderIndex(inputIndex);
   };
 
   return (
@@ -47,7 +51,7 @@ const SearchForm: NextPage = () => {
       <button onClick={handleSearch}>検索</button>
       ヘッダの開始行
       <button onClick={handleDecrement}>-</button>
-      {headerIndex}
+      {inputIndex}
       <button onClick={handleIncrement}>+</button>
       <FilteringBox rawData={sheet} headerIndex={headerIndex} />
     </>

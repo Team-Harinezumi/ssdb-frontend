@@ -39,7 +39,9 @@ const ShowFilteredData: NextPage<Props> = ({
   // スプレッドシートの列を表示するjsxを生成
   const singleRow = (row: RowOfSpreadSheet, index: number) =>
     headers.map((header) => {
-      if (row.data[header].length <= 25) {
+      if (!row.data[header]) {
+        return <td></td>;
+      } else if (row.data[header].length <= 25) {
         return <td>{row.data[header]}</td>;
       } else if (row.options.folded) {
         return (
