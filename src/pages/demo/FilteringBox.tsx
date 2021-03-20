@@ -58,11 +58,11 @@ const FilteringBox: NextPage<props> = ({ rawData = [] }) => {
       data.map((row) => {
         for (const key of Object.keys(inputs)) {
           if (inputs[key] && !row.data[key].includes(inputs[key])) {
-            return { ...row, options: { shown: false } };
+            return { ...row, options: { shown: false, folded: true } };
           }
         }
 
-        return { ...row, options: { shown: true } };
+        return { ...row, options: { shown: true, folded: true } };
       })
     );
   }, [inputs]);

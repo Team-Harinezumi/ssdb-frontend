@@ -22,6 +22,7 @@ export const formattedData = (
         data: {},
         options: {
           shown: true,
+          folded: true,
         },
       };
       headers.forEach(
