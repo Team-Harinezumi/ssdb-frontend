@@ -1,14 +1,14 @@
 import { NextPage } from "next";
 import { useState, useEffect } from "react";
-import ShowFilteredData from "./ShowFilteredData";
-import { formattedData } from "../../lib/rawdata_to_formatted";
-import type { RowOfSpreadSheet } from "./ShowFilteredData";
+import ShowFilteredData from "@/components/ShowFilteredData";
+import { formattedData } from "@/lib/rawdata_to_formatted";
+import type { RowOfSpreadSheet } from "@/models/RowOfSpreadSheet";
 
-type props = {
+type Props = {
   rawData: string[][];
 };
 
-const FilteringBox: NextPage<props> = ({ rawData = [] }) => {
+const FilteringBox: NextPage<Props> = ({ rawData = [] }) => {
   // 初期状態では何も描画しない
   if (!rawData.length) {
     return <></>;
