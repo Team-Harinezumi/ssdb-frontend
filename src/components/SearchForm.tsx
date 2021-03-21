@@ -2,6 +2,19 @@ import { NextPage } from "next";
 import { useState } from "react";
 import FilteringBox from "@/components/FilteringBox";
 import { fetchGss } from "@/api/fetch_gss";
+import { Button } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+
+// Material-UIに当てるクラス
+const useStyles = makeStyles(() => ({
+  searchButton: {
+    backgroundColor: "#519FE8",
+    "&:hover": {
+      backgroundColor: "#519FE8",
+    },
+    color: "white",
+  },
+}));
 
 const SearchForm: NextPage = () => {
   // ユーザの入力とバインド
@@ -15,6 +28,8 @@ const SearchForm: NextPage = () => {
   const [headerIndex, setHeaderIndex] = useState(1);
   // SSの整形前のデータ
   const [sheet, setSheet] = useState<string[][]>([]);
+
+  const classes = useStyles();
 
   // ユーザの入力を取得
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -44,11 +59,17 @@ const SearchForm: NextPage = () => {
     <>
       <input
         type="text"
-        placeholder="URLを入力してください"
+        placeholder="URL"
         value={inputUrl}
         onChange={handleChange}
       />
-      <button onClick={handleSearch}>検索</button>
+      <Button
+        variant="contained"
+        className={classes.searchButton}
+        onClick={handleSearch}
+      >
+        検索
+      </Button>
       ヘッダの開始行
       <button onClick={handleDecrement}>-</button>
       {inputIndex}
