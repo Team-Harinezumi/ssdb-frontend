@@ -28,7 +28,7 @@ export const fetchSheetsInfo = async (url: string) => {
       const res = await axios.get(adjustedUrl)
       const domParser = new DOMParser()
       const dom = domParser.parseFromString(res.data, "text/html")
-      const sheetMenu = [].slice.call(dom.getElementById('sheet-menu')?.getElementsByTagName('li') || [])
+      const sheetMenu: any = [].slice.call(dom.getElementById('sheet-menu')?.getElementsByTagName('li') || [])
       const sheetInfo = sheetMenu.map(node => (
         {
           gid: node.id.split('-')[2],
