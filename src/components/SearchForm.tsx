@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FilteringBox from "@/components/FilteringBox";
 import { fetchGss } from "@/api/fetch_gss";
 import { Button } from "@material-ui/core";
@@ -16,16 +16,24 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const SearchForm: NextPage = () => {
+type Props = {
+  defaultUrl: string;
+  defaultHeaderIndex: number;
+  fixed: number;
+};
+
+const SearchForm: NextPage<Props> = ({
+  defaultUrl = "",
+  defaultHeaderIndex = 1,
+  fixed = 0,
+}) => {
   // ユーザの入力とバインド
-  const [inputUrl, setInputUrl] = useState(
-    "https://docs.google.com/spreadsheets/d/e/2PACX-1vSDSvWQNtJMW5IUsLF6FP12PNt8nSqaqw554UiNnUEYAZlWSp7PU509-M2IJ96D72gpCJznDvyied57/pubhtml"
-  );
+  const [inputUrl, setInputUrl] = useState(defaultUrl);
   // ヘッダ行のインデックス(ユーザ入力)
-  const [inputIndex, setInputIndex] = useState(1);
+  const [inputIndex, setInputIndex] = useState(defaultHeaderIndex);
   // ヘッダ行のインデックス(次のコンポーネントに渡す)
   // inputIndexと分けないとデータの表示中にボタンを触った時想定外の挙動
-  const [headerIndex, setHeaderIndex] = useState(1);
+  const [headerIndex, setHeaderIndex] = useState(defaultHeaderIndex);
   // SSの整形前のデータ
   const [sheet, setSheet] = useState<string[][]>([]);
 
@@ -55,25 +63,36 @@ const SearchForm: NextPage = () => {
     setHeaderIndex(inputIndex);
   };
 
+  // トップページから入力されて飛んできた時に検索を走らせる
+  useEffect(() => {
+    handleSearch();
+  }, []);
+
   return (
     <>
-      <input
-        type="text"
-        placeholder="URL"
-        value={inputUrl}
-        onChange={handleChange}
-      />
-      <Button
-        variant="contained"
-        className={classes.searchButton}
-        onClick={handleSearch}
-      >
-        検索
-      </Button>
-      ヘッダの開始行
-      <button onClick={handleDecrement}>-</button>
-      {inputIndex}
-      <button onClick={handleIncrement}>+</button>
+      {fixed ? (
+        <></>
+      ) : (
+        <>
+          <input
+            type="text"
+            placeholder="URL"
+            value={inputUrl}
+            onChange={handleChange}
+          />
+          <Button
+            variant="contained"
+            className={classes.searchButton}
+            onClick={handleSearch}
+          >
+            検索
+          </Button>
+          ヘッダの開始行
+          <button onClick={handleDecrement}>-</button>
+          {inputIndex}
+          <button onClick={handleIncrement}>+</button>
+        </>
+      )}
       <FilteringBox rawData={sheet} headerIndex={headerIndex} />
     </>
   );
