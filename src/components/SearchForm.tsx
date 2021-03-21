@@ -34,6 +34,8 @@ const SearchForm: NextPage<Props> = ({
   // ヘッダ行のインデックス(次のコンポーネントに渡す)
   // inputIndexと分けないとデータの表示中にボタンを触った時想定外の挙動
   const [headerIndex, setHeaderIndex] = useState(defaultHeaderIndex);
+  // URLが魔法のスプレッドシートかどうか
+  const [isMagicSpreadSheet, setIsMagicSpreadSheet] = useState(false);
   // SSの整形前のデータ
   const [sheet, setSheet] = useState<string[][]>([]);
 
@@ -68,6 +70,20 @@ const SearchForm: NextPage<Props> = ({
     handleSearch();
   }, []);
 
+  // 魔法のスプレッドシートが入力されているか判定する
+  useEffect(() => {
+    if (
+      inputUrl ===
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vSDSvWQNtJMW5IUsLF6FP12PNt8nSqaqw554UiNnUEYAZlWSp7PU509-M2IJ96D72gpCJznDvyied57/pubhtml"
+    ) {
+      setIsMagicSpreadSheet(true);
+      setInputIndex(2);
+      setHeaderIndex(2);
+    } else {
+      setIsMagicSpreadSheet(false);
+    }
+  }, [inputUrl]);
+
   return (
     <>
       {fixed ? (
@@ -87,10 +103,16 @@ const SearchForm: NextPage<Props> = ({
           >
             検索
           </Button>
-          ヘッダの開始行
-          <button onClick={handleDecrement}>-</button>
-          {inputIndex}
-          <button onClick={handleIncrement}>+</button>
+          {isMagicSpreadSheet ? (
+            <></>
+          ) : (
+            <>
+              ヘッダの開始行
+              <button onClick={handleDecrement}>-</button>
+              {inputIndex}
+              <button onClick={handleIncrement}>+</button>
+            </>
+          )}
         </>
       )}
       <FilteringBox rawData={sheet} headerIndex={headerIndex} />
