@@ -4,6 +4,7 @@ import FilteringBox from "@/components/FilteringBox";
 import { fetchGss } from "@/api/fetch_gss";
 import { Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { fetchSheetsInfo } from "../api/fetch_gss";
 
 // Material-UIに当てるクラス
 const useStyles = makeStyles(() => ({
@@ -49,6 +50,8 @@ const SearchForm: NextPage = () => {
   const handleSearch = () => {
     const gss = async () => {
       const fetchedGss = await fetchGss(inputUrl);
+      const tmp = await fetchSheetsInfo(inputUrl);
+      console.log(tmp)
       setSheet(fetchedGss as string[][]);
     };
     gss();
