@@ -1,6 +1,6 @@
 import { NextPage } from "next";
-import SearchForm from "@/components/SearchForm";
+import TopPage from "@/components/TopPage";
 
-const IndexPage: NextPage = () => (<SearchForm />);
+const IndexPage: NextPage = () => <TopPage />;
 
-export default IndexPage
+export default IndexPage;
