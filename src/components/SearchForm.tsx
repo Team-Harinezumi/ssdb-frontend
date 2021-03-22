@@ -45,11 +45,12 @@ const SearchForm: NextPage<Props> = ({
   const [isMagicSpreadSheet, setIsMagicSpreadSheet] = useState(false);
   // SSの整形前のデータ
   const [sheet, setSheet] = useState<string[][]>([]);
-  // TODO: useState追加する↓
-  // TODO: シート情報データのリスト{gid: string: sheetName: string}[]
-  // TODO: 選択中のシートのインデックス(0-index)
-
-  // TODO: シートの変更を扱う
+  // シートのタイトル
+  const [title, setTitle] = useState("");
+  // シート情報データのリスト{gid: string: sheetName: string}[]
+  const [sheetInfo, setSheetInfo] = useState<SheetInfo[]>([]);
+  // 選択中のシートのインデックス(0-index)
+  const [sheetIndex, setSheetIndex] = useState(0);
 
   const classes = useStyles();
 
@@ -66,6 +67,10 @@ const SearchForm: NextPage<Props> = ({
     if (inputHeaderIndex === 1) return;
     setInputIndex((inputIndex) => inputIndex - 1);
   };
+  // シートの切り替え
+  const handleSheetChange = (index: number) => {
+    setSheetIndex(index);
+  };
   // トップへ戻る
   const router = useRouter();
   const goToTop = () => {
@@ -74,13 +79,38 @@ const SearchForm: NextPage<Props> = ({
     });
   };
 
+  // SheetInfoの配列であることを保証する型ガード
+  const isSheetInfoArray = (arg: unknown): arg is SheetInfo[] => {
+    const info = arg as SheetInfo[];
+
+    return info.every(
+      (i) => typeof i?.gid === "string" && typeof i?.sheetName === "string"
+    );
+  };
+  // 正しいデータが返ってきていることを保証する型ガード
+  const isValidData = (
+    arg: unknown
+  ): arg is {
+    title: string;
+    data: SheetInfo[];
+  } => {
+    const data = arg as {
+      title: string;
+      data: SheetInfo[];
+    };
+    return typeof data?.title === "string" && isSheetInfoArray(data.data);
+  };
+
   // 検索ボタンを押すと入力したURLからSSが呼ばれ、シートを取得(未整形)
   const handleSearch = () => {
     const gss = async () => {
-      const fetchedGss = await fetchGss(inputUrl);
-      const tmp = await fetchSheetsInfo(inputUrl);
-      console.log(tmp);
-      setSheet(fetchedGss as string[][]);
+      const sheetData = await fetchSheetsInfo(inputUrl);
+      if (isValidData(sheetData)) {
+        setTitle(sheetData.title);
+        setSheetInfo(sheetData.data);
+        const fetchedGss = await fetchGss(inputUrl, sheetData.data[0].gid);
+        setSheet(fetchedGss as string[][]);
+      }
     };
     gss();
     setHeaderIndex(inputHeaderIndex);
@@ -101,6 +131,16 @@ const SearchForm: NextPage<Props> = ({
       setIsMagicSpreadSheet(false);
     }
   }, [inputUrl]);
+
+  // シートの変更を扱う
+  useEffect(() => {
+    const gss = async () => {
+      const fetchedGss = await fetchGss(inputUrl, sheetInfo[sheetIndex].gid);
+      setSheet(fetchedGss as string[][]);
+    };
+    if (sheetInfo.length) gss();
+    setHeaderIndex(inputHeaderIndex);
+  }, [sheetIndex]);
 
   return (
     <>
@@ -135,6 +175,16 @@ const SearchForm: NextPage<Props> = ({
             )}
           </>
         )}
+      </div>
+      <div>{title}</div>
+      <div>
+        {sheetInfo.map((sheet, index) => {
+          return (
+            <button name={sheet.gid} onClick={() => handleSheetChange(index)}>
+              {sheet.sheetName}
+            </button>
+          );
+        })}
       </div>
       <FilteringBox rawData={sheet} headerIndex={headerIndex} />
     </>
