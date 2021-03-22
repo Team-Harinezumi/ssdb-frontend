@@ -5,6 +5,13 @@ import { fetchGss } from "@/api/fetch_gss";
 import { Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { fetchSheetsInfo } from "../api/fetch_gss";
+import { DownloadButton } from "@/components/DownloadButton"
+
+const SAMPLE = [
+  ["Name", "Debut date", "Birthday", "Height", "Fanbase name", "Illustrator", "Twitter"],
+  ["Mori Calliope", "September 12, 2020", "April 4th", "167 cm", "", "Yukisame", "https://twitter.com/moricalliope"],
+  ["Takanashi Kiara", "September 12, 2020", "July 6th", "165 cm", "", "huke", "https://twitter.com/takanashikiara"]
+];
 
 // Material-UIに当てるクラス
 const useStyles = makeStyles(() => ({
@@ -60,6 +67,10 @@ const SearchForm: NextPage = () => {
 
   return (
     <>
+      <DownloadButton
+        fileName='spread-sheet'
+        data={SAMPLE}
+      />
       <input
         type="text"
         placeholder="URL"
