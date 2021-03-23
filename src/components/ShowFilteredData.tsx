@@ -1,7 +1,9 @@
 import { NextPage } from "next";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { DownloadButton } from "@/components/DownloadButton";
 import { RowOfSpreadSheet } from "@/models/RowOfSpreadSheet";
+import { arrayData } from "@/lib/formatted_to_array";
 import { TableCell, TableRow, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -25,8 +27,15 @@ const ShowFilteredData: NextPage<Props> = ({
   filteredData = [],
   headers = [""],
 }) => {
+  // TODO: データバインドが上手くいっていないので直す
   // 表示するデータ
-  const [shownData, setShownData] = useState<RowOfSpreadSheet[]>(filteredData);
+  const [shownData, setShownData] = useState<RowOfSpreadSheet[]>([]);
+
+  /*
+  //// TEST
+  // ダウンロード用のデータ
+  const [dlData, setDlData] = useState<string[][]>([[]]);
+  */
 
   const classes = useStyles();
 
@@ -34,6 +43,17 @@ const ShowFilteredData: NextPage<Props> = ({
   useEffect(() => {
     setShownData(filteredData);
   }, [filteredData]);
+
+  /*
+  //// TEST
+  // データを設定し直し
+  useEffect(() => {
+    setDlData(arrayData(headers, shownData));
+  }, [shownData]);
+  useEffect(() => {
+    console.log(dlData);
+  }, [dlData]);
+  */
 
   // 削除ボタンが押された時に変更
   const deleteRow = (index: number) => {
@@ -104,7 +124,12 @@ const ShowFilteredData: NextPage<Props> = ({
   return (
     <>
       <TableRow>
-        <TableCell></TableCell>
+        <TableCell>
+          <DownloadButton
+            fileName="spread-sheet"
+            data={arrayData(headers, shownData)}
+          />
+        </TableCell>
         {headerForTable}
       </TableRow>
       {shownRows}

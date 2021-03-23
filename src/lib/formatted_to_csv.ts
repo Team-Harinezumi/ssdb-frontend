@@ -1,9 +1,6 @@
 import type { RowOfSpreadSheet } from "@/models/RowOfSpreadSheet";
 
-export const formatted_to_csv = (
-  headers: string[],
-  data: RowOfSpreadSheet[]
-) => {
+export const csvData = (headers: string[], data: RowOfSpreadSheet[]) => {
   return (
     headers.join(",") +
     "\n" +

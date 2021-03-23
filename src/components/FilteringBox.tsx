@@ -77,7 +77,7 @@ const FilteringBox: NextPage<Props> = ({ rawData = [], headerIndex = 1 }) => {
 
   return (
     <TableContainer>
-      <Table stickyHeader>
+      <Table>
         <TableBody>
           <TableRow>
             <TableCell></TableCell>
