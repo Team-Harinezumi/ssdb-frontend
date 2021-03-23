@@ -2,14 +2,9 @@ import { NextPage } from "next";
 import { useState, useEffect } from "react";
 import ShowFilteredData from "@/components/ShowFilteredData";
 import { formattedData } from "@/lib/rawdata_to_formatted";
-import {
-  Table,
-  TableBody,
-  TableContainer,
-  TableRow,
-  TableCell,
-} from "@material-ui/core";
 import type { RowOfSpreadSheet } from "@/models/RowOfSpreadSheet";
+import { Table } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 type Props = {
   rawData: string[][];
@@ -48,7 +43,7 @@ const FilteringBox: NextPage<Props> = ({ rawData = [], headerIndex = 1 }) => {
   // 絞り込み用のテキストボックス
   const inputBoxs = headers.map((header) => {
     return (
-      <TableCell>
+      <td>
         <input
           type="text"
           name={header}
@@ -56,7 +51,7 @@ const FilteringBox: NextPage<Props> = ({ rawData = [], headerIndex = 1 }) => {
           placeholder="絞り込み"
           onChange={handleChange}
         />
-      </TableCell>
+      </td>
     );
   });
 
@@ -76,17 +71,15 @@ const FilteringBox: NextPage<Props> = ({ rawData = [], headerIndex = 1 }) => {
   }, [inputs]);
 
   return (
-    <TableContainer>
-      <Table stickyHeader>
-        <TableBody>
-          <TableRow>
-            <TableCell></TableCell>
-            {inputBoxs}
-          </TableRow>
-          <ShowFilteredData filteredData={data} headers={headers} />
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <Table>
+      <tbody>
+        <tr>
+          <td></td>
+          {inputBoxs}
+        </tr>
+        <ShowFilteredData filteredData={data} headers={headers} />
+      </tbody>
+    </Table>
   );
 };
 

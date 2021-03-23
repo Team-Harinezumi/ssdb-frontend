@@ -2,9 +2,6 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-const engineerUrl =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vSDSvWQNtJMW5IUsLF6FP12PNt8nSqaqw554UiNnUEYAZlWSp7PU509-M2IJ96D72gpCJznDvyied57/pubhtml";
-
 const TopPage: NextPage = () => {
   // URLをユーザの入力とバインド
   const [inputUrl, setInputUrl] = useState("");
@@ -42,20 +39,24 @@ const TopPage: NextPage = () => {
     pushQuery(inputUrl, inputIndex, 0);
   };
   // 魔法のスプレッドシート(エンジニア)用
-  const gotoMagicSpreadSheet = (url: string) => {
-    pushQuery(url, 2, 1);
+  const gotoMagicSpreadSheet = (
+    genre: "engineer" | "business" | "designer"
+  ) => {
+    router.push({
+      pathname: genre,
+    });
   };
 
   return (
     <>
       <div>
-        <button onClick={() => gotoMagicSpreadSheet(engineerUrl)}>
+        <button onClick={() => gotoMagicSpreadSheet("engineer")}>
           エンジニア用魔法のスプレッドシート
         </button>
-        <button onClick={() => gotoMagicSpreadSheet(engineerUrl)}>
+        <button onClick={() => gotoMagicSpreadSheet("business")}>
           ビジネス用魔法のスプレッドシート
         </button>
-        <button onClick={() => gotoMagicSpreadSheet(engineerUrl)}>
+        <button onClick={() => gotoMagicSpreadSheet("designer")}>
           デザイナー用魔法のスプレッドシート
         </button>
       </div>

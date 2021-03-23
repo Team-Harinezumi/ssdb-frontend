@@ -3,32 +3,43 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import FilteringBox from "@/components/FilteringBox";
 import { fetchGss } from "@/api/fetch_gss";
-import { Button } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { fetchSheetsInfo } from "../api/fetch_gss";
-import { DownloadButton } from "@/components/DownloadButton"
+import { fetchSheetsInfo } from "@/api/fetch_gss";
+import { DownloadButton } from "@/components/DownloadButton";
 
 const SAMPLE = [
-  ["Name", "Debut date", "Birthday", "Height", "Fanbase name", "Illustrator", "Twitter"],
-  ["Mori Calliope", "September 12, 2020", "April 4th", "167 cm", "", "Yukisame", "https://twitter.com/moricalliope"],
-  ["Takanashi Kiara", "September 12, 2020", "July 6th", "165 cm", "", "huke", "https://twitter.com/takanashikiara"]
+  [
+    "Name",
+    "Debut date",
+    "Birthday",
+    "Height",
+    "Fanbase name",
+    "Illustrator",
+    "Twitter",
+  ],
+  [
+    "Mori Calliope",
+    "September 12, 2020",
+    "April 4th",
+    "167 cm",
+    "",
+    "Yukisame",
+    "https://twitter.com/moricalliope",
+  ],
+  [
+    "Takanashi Kiara",
+    "September 12, 2020",
+    "July 6th",
+    "165 cm",
+    "",
+    "huke",
+    "https://twitter.com/takanashikiara",
+  ],
 ];
 
 import type { SheetInfo } from "@/models/SheetInfo";
 
 const engineerUrl =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vSDSvWQNtJMW5IUsLF6FP12PNt8nSqaqw554UiNnUEYAZlWSp7PU509-M2IJ96D72gpCJznDvyied57/pubhtml";
-
-// Material-UIに当てるクラス
-const useStyles = makeStyles(() => ({
-  searchButton: {
-    backgroundColor: "#519FE8",
-    "&:hover": {
-      backgroundColor: "#519FE8",
-    },
-    color: "white",
-  },
-}));
 
 type Props = {
   defaultUrl: string;
@@ -58,8 +69,6 @@ const SearchForm: NextPage<Props> = ({
   const [sheetInfo, setSheetInfo] = useState<SheetInfo[]>([]);
   // 選択中のシートのインデックス(0-index)
   const [sheetIndex, setSheetIndex] = useState(0);
-
-  const classes = useStyles();
 
   // ユーザの入力を取得
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -152,10 +161,7 @@ const SearchForm: NextPage<Props> = ({
   return (
     <>
       <div>
-        <DownloadButton
-          fileName='spread-sheet'
-          data={SAMPLE}
-        />
+        <DownloadButton fileName="spread-sheet" data={SAMPLE} />
         <button onClick={goToTop}>トップへ戻る</button>
         <input
           type="text"
@@ -167,13 +173,7 @@ const SearchForm: NextPage<Props> = ({
           <></>
         ) : (
           <>
-            <Button
-              variant="contained"
-              className={classes.searchButton}
-              onClick={handleSearch}
-            >
-              検索
-            </Button>
+            <button onClick={handleSearch}>検索</button>
             {isMagicSpreadSheet ? (
               <></>
             ) : (
