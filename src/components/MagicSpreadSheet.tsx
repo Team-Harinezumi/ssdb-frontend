@@ -122,7 +122,7 @@ const MagicSpreadSheet: NextPage<Props> = ({ type = "engineer" }) => {
       </Navbar>
       <div>{title}</div>
       <div>
-        {genre.icon} {genre.jp}
+        {genre.icon} <span className="genre">{genre.jp}</span>
       </div>
       <div>
         <input type="text" placeholder="URL" value={genre.url} disabled />{" "}
