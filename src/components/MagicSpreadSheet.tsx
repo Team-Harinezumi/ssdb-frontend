@@ -120,6 +120,7 @@ const MagicSpreadSheet: NextPage<Props> = ({ type = "engineer" }) => {
           <Nav.Link href="/designer">デザイナー</Nav.Link>
         </Nav>
       </Navbar>
+      <div>{title}</div>
       <div>
         {genre.icon} {genre.jp}
       </div>

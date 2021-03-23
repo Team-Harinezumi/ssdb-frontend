@@ -43,7 +43,7 @@ const TopPage: NextPage = () => {
     genre: "engineer" | "business" | "designer"
   ) => {
     router.push({
-      pathname: `${genre}`,
+      pathname: genre,
     });
   };
 
