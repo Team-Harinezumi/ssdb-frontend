@@ -12,9 +12,9 @@ import type { SheetInfo } from "@/models/SheetInfo";
 const engineerUrl =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vSDSvWQNtJMW5IUsLF6FP12PNt8nSqaqw554UiNnUEYAZlWSp7PU509-M2IJ96D72gpCJznDvyied57/pubhtml";
 const businessUrl =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vSDSvWQNtJMW5IUsLF6FP12PNt8nSqaqw554UiNnUEYAZlWSp7PU509-M2IJ96D72gpCJznDvyied57/pubhtml";
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vQS2ZZvilsEcGFT6RXkTyQ65N2dzd77LVGb-JEcMs1vZXn0TjbhzsAsw3C5hoPZqFV0qkH4Q2M5bxNR/pubhtml";
 const designerUrl =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vSDSvWQNtJMW5IUsLF6FP12PNt8nSqaqw554UiNnUEYAZlWSp7PU509-M2IJ96D72gpCJznDvyied57/pubhtml";
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vS1m_7GVR3IJlJQp3D3f76MhOOcH8HdWR_sLy_9cyhaUaOPmW4Ppci-249QaYI0Dz9bpwPKU5TN9JxI/pubhtml";
 
 type Props = {
   type: "engineer" | "business" | "designer";
@@ -29,6 +29,8 @@ const MagicSpreadSheet: NextPage<Props> = ({ type = "engineer" }) => {
   const [sheetInfo, setSheetInfo] = useState<SheetInfo[]>([]);
   // 選択中のシートのインデックス(0-index)
   const [sheetIndex, setSheetIndex] = useState(0);
+  // ヘッダの開始行
+  const [headerIndex, setHeaderIndex] = useState(2);
 
   const genre = ((): {
     url: string;
@@ -89,8 +91,18 @@ const MagicSpreadSheet: NextPage<Props> = ({ type = "engineer" }) => {
       if (isValidData(sheetData)) {
         setTitle(sheetData.title);
         setSheetInfo(sheetData.data);
-        const fetchedGss = await fetchGss(genre.url, sheetData.data[0].gid);
-        setSheet(fetchedGss as string[][]);
+
+        // シートの数が1の時はそれぞれに合わせる必要がある
+        if (sheetData.data.length) {
+          const fetchedGss = await fetchGss(genre.url, sheetData.data[0].gid);
+          setSheet(fetchedGss as string[][]);
+        } else if (type === "business") {
+          const fetchedGss = await fetchGss(genre.url, "2018723793");
+          setSheet(fetchedGss as string[][]);
+        } else if (type === "designer") {
+          const fetchedGss = await fetchGss(genre.url, "554196693");
+          setSheet(fetchedGss as string[][]);
+        }
       }
     };
     gss();
@@ -107,7 +119,20 @@ const MagicSpreadSheet: NextPage<Props> = ({ type = "engineer" }) => {
       const fetchedGss = await fetchGss(genre.url, sheetInfo[sheetIndex].gid);
       setSheet(fetchedGss as string[][]);
     };
-    if (sheetInfo.length) gss();
+    if (sheetInfo.length) {
+      gss();
+      if (
+        type === "engineer" &&
+        (sheetInfo[sheetIndex].gid === "1234947860" ||
+          sheetInfo[sheetIndex].gid === "211039304" ||
+          sheetInfo[sheetIndex].gid === "397387909" ||
+          sheetInfo[sheetIndex].gid === "142019139")
+      ) {
+        setHeaderIndex(1);
+      } else {
+        setHeaderIndex(2);
+      }
+    }
   }, [sheetIndex]);
 
   return (
@@ -141,7 +166,7 @@ const MagicSpreadSheet: NextPage<Props> = ({ type = "engineer" }) => {
           );
         })}
       </div>
-      <FilteringBox rawData={sheet} headerIndex={2} />
+      <FilteringBox rawData={sheet} headerIndex={headerIndex} />
     </>
   );
 };
