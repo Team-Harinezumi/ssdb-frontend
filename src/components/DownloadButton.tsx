@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 
 // How to Use
 // fileName: string
@@ -14,39 +14,44 @@ import { useEffect, useState } from "react"
 // <DownloadButton fileName={fileName} data={data} />
 
 interface DownloadData {
-  fileName: string
-  data: string[][]
+  fileName: string;
+  data: string[][];
 }
-  
-export const DownloadButton: React.FC<DownloadData> = ({ fileName, data }: DownloadData) => {
-  const [downloadInfo, setDownloadInfo] = useState<string[]>([])
+
+export const DownloadButton: React.FC<DownloadData> = ({
+  fileName,
+  data,
+}: DownloadData) => {
+  const [downloadInfo, setDownloadInfo] = useState<string[]>([]);
 
   useEffect(() => {
-    const recordsForCSV = data.map(record => {
-      return record.map(cell => {
+    const recordsForCSV = data.map((record) => {
+      return record.map((cell) => {
         if (cell.includes(",")) {
-          return `"${cell}"`
+          return `"${cell}"`;
         } else {
-          return cell
+          return cell;
         }
-      })
-    })
+      });
+    });
 
-    let downloadData = recordsForCSV.map(record => record.join(',')).join('\r\n')
-    let bom = new Uint8Array([0xEF, 0xBB, 0xBF])
-    let blob = new Blob([bom, downloadData], {type: 'text/csv'});
+    let downloadData = recordsForCSV
+      .map((record) => record.join(","))
+      .join("\r\n");
+    let bom = new Uint8Array([0xef, 0xbb, 0xbf]);
+    let blob = new Blob([bom, downloadData], { type: "text/csv" });
     let url = (window.URL || window.webkitURL).createObjectURL(blob);
 
-    setDownloadInfo([`${fileName}.csv`, url])
-  }, [])
+    setDownloadInfo([`${fileName}.csv`, url]);
+  }, []);
 
   return (
     <>
-      {
-        downloadInfo[0]
-        &&
-        <a download={downloadInfo[0]} href={downloadInfo[1]}>csvダウンロード</a>
-      }
+      {downloadInfo[0] && (
+        <a download={downloadInfo[0]} href={downloadInfo[1]}>
+          csvダウンロード
+        </a>
+      )}
     </>
-  )
-}
+  );
+};
