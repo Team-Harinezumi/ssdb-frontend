@@ -39,19 +39,22 @@ const MagicSpreadSheet: NextPage<Props> = ({ type = "engineer" }) => {
       return {
         url: engineerUrl,
         jp: "エンジニア",
-        icon: <Laptop width="32" height="32" />,
+        icon:<img src="/img/1.png" width="60" alt="エンジニアの画像" />
+        ,
       };
     } else if (type === "business") {
       return {
         url: businessUrl,
         jp: "ビジネス",
-        icon: <Watch width="32" height="32" />,
+        icon:<img src="/img/2.png" width="60" alt="ビジネスの画像" />
+        ,
       };
     }
     return {
       url: designerUrl,
       jp: "デザイナー",
-      icon: <Brush width="32" height="32" />,
+      icon:<img src="/img/3.png" width="60" alt="エンジニアの画像" />
+      ,
     };
   })();
 
@@ -112,23 +115,30 @@ const MagicSpreadSheet: NextPage<Props> = ({ type = "engineer" }) => {
 
   return (
     <>
-      <Navbar bg="light" variant="light">
-        <Navbar.Brand href="/">SSDB</Navbar.Brand>
-        <Nav className="mr-auto">
-          <Nav.Link href="/engineer">エンジニア</Nav.Link>
-          <Nav.Link href="/business">ビジネス</Nav.Link>
-          <Nav.Link href="/designer">デザイナー</Nav.Link>
+      <header className='header'>
+        <div className='header_left'>
+          <Navbar.Brand href="/">
+            <img src="/img/logo.png" alt="" className="header_logo" />
+          </Navbar.Brand>
+        </div>
+        <nav>
+        <Nav className="header-list">
+          <Nav.Link className='li'  href="/engineer">エンジニア</Nav.Link>
+          <Nav.Link className='li'  href="/business">ビジネス</Nav.Link>
+          <Nav.Link className='li'  href="/designer">デザイナー</Nav.Link>
         </Nav>
-      </Navbar>
-      <div>{title}</div>
+      </nav>
+      </header>
+      <main className="_main">
+        <div className="page_icon">
+            {genre.icon}
+          <p className='icon_title'>{genre.jp}</p>
+        </div>
       <div>
-        {genre.icon} <span className="genre">{genre.jp}</span>
-      </div>
-      <div>
-        <input type="text" placeholder="URL" value={genre.url} disabled />{" "}
+        <input className="_input" type="text" placeholder="URL" value={genre.url} disabled />{" "}
         <Button variant="primary">コピー</Button>
       </div>
-      <div>
+      <div className='yaer_list'>
         {sheetInfo.map((sheet, index) => {
           return (
             <Button
@@ -141,7 +151,8 @@ const MagicSpreadSheet: NextPage<Props> = ({ type = "engineer" }) => {
           );
         })}
       </div>
-      <FilteringBox rawData={sheet} headerIndex={2} />
+        <FilteringBox rawData={sheet} headerIndex={2} />
+      </main>
     </>
   );
 };
