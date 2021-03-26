@@ -4,7 +4,6 @@ import FilteringBox from "@/components/FilteringBox";
 import { fetchGss } from "@/api/fetch_gss";
 import { fetchSheetsInfo } from "@/api/fetch_gss";
 import { Navbar, Nav, Button } from "react-bootstrap";
-import { Laptop, Brush, Watch } from "react-bootstrap-icons";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import type { SheetInfo } from "@/models/SheetInfo";
@@ -134,11 +133,8 @@ const MagicSpreadSheet: NextPage<Props> = ({ type = "engineer" }) => {
             {genre.icon}
           <p className='icon_title'>{genre.jp}</p>
         </div>
-      <div>
-        <input className="_input" type="text" placeholder="URL" value={genre.url} disabled />{" "}
-        <Button variant="primary">コピー</Button>
-      </div>
-      <div className='yaer_list'>
+        <div className='yaer_list'>
+          
         {sheetInfo.map((sheet, index) => {
           return (
             <Button
@@ -150,9 +146,14 @@ const MagicSpreadSheet: NextPage<Props> = ({ type = "engineer" }) => {
             </Button>
           );
         })}
+          <input className="_input" type="text" placeholder="URL" value={genre.url} disabled />{" "}
+        <Button variant="primary">コピー</Button>
       </div>
         <FilteringBox rawData={sheet} headerIndex={2} />
       </main>
+      <footer>
+        <span className='none'>{title}</span>
+      </footer>
     </>
   );
 };

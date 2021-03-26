@@ -74,6 +74,7 @@ const TopPage: NextPage = () => {
               <img onClick={() => gotoMagicSpreadSheet("designer")} src="/img/3.png" className="de" alt=""/>
               <img onClick={() => gotoMagicSpreadSheet("engineer")} src="/img/1.png" className="pr" alt=""/>
           </div>
+          <div>
             <input
             className='input'
             type="text"
@@ -82,13 +83,20 @@ const TopPage: NextPage = () => {
             onChange={handleChange}
           />
           <button className="button" onClick={startSearch}>検索</button>
-          {/* ヘッダの開始行
-          <button onClick={handleDecrement}>-</button>
+          </div>
+          <div className='center'>
+          シートの開始行
+          <button className='seetbtn' onClick={handleDecrement}>ー</button>
           {inputIndex}
-          <button onClick={handleIncrement}>+</button> */}
+          <button className='seetbtn' onClick={handleIncrement}>＋</button>
+        </div>
         </div>
       </main>
-      <footer>s</footer>
+      <footer>
+        <div className='fotter_flex'>
+          {/* <p className='footer_title'>© 2021 Harinezumi</p> */}
+        </div>
+      </footer>
     </>
   );
 };

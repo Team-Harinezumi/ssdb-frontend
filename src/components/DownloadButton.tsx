@@ -45,7 +45,7 @@ export const DownloadButton: React.FC<DownloadData> = ({ fileName, data }: Downl
       {
         downloadInfo[0]
         &&
-        <a download={downloadInfo[0]} href={downloadInfo[1]}>csvダウンロード</a>
+        <a download={downloadInfo[0]} className='download_btn' href={downloadInfo[1]}>ダウンロード</a>
       }
     </>
   )
