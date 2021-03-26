@@ -20,27 +20,10 @@ const ShowFilteredData: NextPage<Props> = ({
   // 表示するデータ
   const [shownData, setShownData] = useState<RowOfSpreadSheet[]>([]);
 
-  /*
-  //// TEST
-  // ダウンロード用のデータ
-  const [dlData, setDlData] = useState<string[][]>([[]]);
-  */
-
   // ユーザの入力によってデータが変わった時に入れ直し
   useEffect(() => {
     setShownData(filteredData);
   }, [filteredData]);
-
-  /*
-  //// TEST
-  // データを設定し直し
-  useEffect(() => {
-    setDlData(arrayData(headers, shownData));
-  }, [shownData]);
-  useEffect(() => {
-    console.log(dlData);
-  }, [dlData]);
-  */
 
   // 削除ボタンが押された時に変更
   const deleteRow = (index: number) => {

@@ -13,7 +13,7 @@ export const arrayData = (
       .filter((row) => row.options.shown)
       .map((row) =>
         Object.values(row.data).map((value) =>
-          value.replace(/\n/g, "").replace(/\r/g, "").replace(/,/g, "，")
+          value.replace(/\n/g, "").replace(/\r/g, "").replace(/-/g, "ー")
         )
       ),
   ];
