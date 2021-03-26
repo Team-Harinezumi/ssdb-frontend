@@ -5,6 +5,7 @@ import { fetchGss } from "@/api/fetch_gss";
 import { fetchSheetsInfo } from "@/api/fetch_gss";
 import { Navbar, Nav, Button } from "react-bootstrap";
 import { Laptop, Brush, Watch } from "react-bootstrap-icons";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import type { SheetInfo } from "@/models/SheetInfo";
@@ -151,7 +152,9 @@ const MagicSpreadSheet: NextPage<Props> = ({ type = "engineer" }) => {
       </div>
       <div>
         <input type="text" placeholder="URL" value={genre.url} disabled />{" "}
-        <Button variant="primary">コピー</Button>
+        <CopyToClipboard text={genre.url} onCopy={() => alert("copied!")}>
+          <Button variant="primary">コピー</Button>
+        </CopyToClipboard>
       </div>
       <div>
         {sheetInfo.map((sheet, index) => {
