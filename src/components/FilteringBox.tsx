@@ -49,6 +49,7 @@ const FilteringBox: NextPage<Props> = ({ rawData = [], headerIndex = 1 }) => {
           name={header}
           value={inputs.header}
           placeholder="絞り込み"
+          className='filter'
           onChange={handleChange}
         />
       </td>

@@ -49,30 +49,54 @@ const TopPage: NextPage = () => {
 
   return (
     <>
-      <div>
-        <button onClick={() => gotoMagicSpreadSheet("engineer")}>
-          エンジニア用魔法のスプレッドシート
-        </button>
-        <button onClick={() => gotoMagicSpreadSheet("business")}>
-          ビジネス用魔法のスプレッドシート
-        </button>
-        <button onClick={() => gotoMagicSpreadSheet("designer")}>
-          デザイナー用魔法のスプレッドシート
-        </button>
-      </div>
-      <div>
-        <input
-          type="text"
-          placeholder="URL"
-          value={inputUrl}
-          onChange={handleChange}
-        />
-        <button onClick={startSearch}>検索</button>
-        ヘッダの開始行
-        <button onClick={handleDecrement}>-</button>
-        {inputIndex}
-        <button onClick={handleIncrement}>+</button>
-      </div>
+      <header>
+        <div className='header_left'>
+          <img src="/img/logo.png" alt="" className="header_logo" />
+        </div>
+        <nav>
+          <ul className="header_list">
+            <li onClick={() => gotoMagicSpreadSheet("engineer")}>
+              エンジニア
+            </li>
+            <li onClick={() => gotoMagicSpreadSheet("business")}>
+              ビジネス
+            </li>
+            <li onClick={() => gotoMagicSpreadSheet("designer")}>
+              デザイナー
+            </li>
+          </ul>
+        </nav>
+      </header>
+      <main>
+        <div>
+          <div className='content'>
+              <img onClick={() => gotoMagicSpreadSheet("business")} src="/img/2.png"className="bi" alt=""/>
+              <img onClick={() => gotoMagicSpreadSheet("designer")} src="/img/3.png" className="de" alt=""/>
+              <img onClick={() => gotoMagicSpreadSheet("engineer")} src="/img/1.png" className="pr" alt=""/>
+          </div>
+          <div>
+            <input
+            className='input'
+            type="text"
+            placeholder="URL"
+            value={inputUrl}
+            onChange={handleChange}
+          />
+          <button className="button" onClick={startSearch}>検索</button>
+          </div>
+          <div className='center'>
+          シートの開始行
+          <button className='seetbtn' onClick={handleDecrement}>ー</button>
+          {inputIndex}
+          <button className='seetbtn' onClick={handleIncrement}>＋</button>
+        </div>
+        </div>
+      </main>
+      <footer>
+        <div className='fotter_flex'>
+          {/* <p className='footer_title'>© 2021 Harinezumi</p> */}
+        </div>
+      </footer>
     </>
   );
 };

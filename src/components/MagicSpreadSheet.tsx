@@ -4,7 +4,6 @@ import FilteringBox from "@/components/FilteringBox";
 import { fetchGss } from "@/api/fetch_gss";
 import { fetchSheetsInfo } from "@/api/fetch_gss";
 import { Navbar, Nav, Button } from "react-bootstrap";
-import { Laptop, Brush, Watch } from "react-bootstrap-icons";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -42,19 +41,22 @@ const MagicSpreadSheet: NextPage<Props> = ({ type = "engineer" }) => {
       return {
         url: engineerUrl,
         jp: "エンジニア",
-        icon: <Laptop width="32" height="32" />,
+        icon:<img src="/img/1.png" width="60" alt="エンジニアの画像" />
+        ,
       };
     } else if (type === "business") {
       return {
         url: businessUrl,
         jp: "ビジネス",
-        icon: <Watch width="32" height="32" />,
+        icon:<img src="/img/2.png" width="60" alt="ビジネスの画像" />
+        ,
       };
     }
     return {
       url: designerUrl,
       jp: "デザイナー",
-      icon: <Brush width="32" height="32" />,
+      icon:<img src="/img/3.png" width="60" alt="エンジニアの画像" />
+      ,
     };
   })();
 
@@ -138,25 +140,26 @@ const MagicSpreadSheet: NextPage<Props> = ({ type = "engineer" }) => {
 
   return (
     <>
-      <Navbar bg="light" variant="light">
-        <Navbar.Brand href="/">SSDB</Navbar.Brand>
-        <Nav className="mr-auto">
-          <Nav.Link href="/engineer">エンジニア</Nav.Link>
-          <Nav.Link href="/business">ビジネス</Nav.Link>
-          <Nav.Link href="/designer">デザイナー</Nav.Link>
+      <header className='header'>
+        <div className='header_left'>
+          <Navbar.Brand href="/">
+            <img src="/img/logo.png" alt="" className="header_logo" />
+          </Navbar.Brand>
+        </div>
+        <nav>
+        <Nav className="header-list">
+          <Nav.Link className='li'  href="/engineer">エンジニア</Nav.Link>
+          <Nav.Link className='li'  href="/business">ビジネス</Nav.Link>
+          <Nav.Link className='li'  href="/designer">デザイナー</Nav.Link>
         </Nav>
-      </Navbar>
-      <div>{title}</div>
-      <div>
-        {genre.icon} <span className="genre">{genre.jp}</span>
-      </div>
-      <div>
-        <input type="text" placeholder="URL" value={genre.url} disabled />{" "}
-        <CopyToClipboard text={genre.url} onCopy={() => alert("copied!")}>
-          <Button variant="primary">コピー</Button>
-        </CopyToClipboard>
-      </div>
-      <div>
+      </nav>
+      </header>
+      <main className="_main">
+        <div className="page_icon">
+            {genre.icon}
+          <p className='icon_title'>{genre.jp}</p>
+        </div>
+        <div className='yaer_list'>
         {sheetInfo.map((sheet, index) => {
           return index === sheetIndex ? (
             <Button
@@ -176,8 +179,16 @@ const MagicSpreadSheet: NextPage<Props> = ({ type = "engineer" }) => {
             </Button>
           );
         })}
+          <input className="_input" type="text" placeholder="URL" value={genre.url} disabled />{" "}
+        <CopyToClipboard text={genre.url} onCopy={() => alert("copied!")}>
+          <Button variant="primary">コピー</Button>
+        </CopyToClipboard>
       </div>
-      <FilteringBox rawData={sheet} headerIndex={headerIndex} />
+        <FilteringBox rawData={sheet} headerIndex={headerIndex} />
+      </main>
+      <footer>
+        <span className='none'>{title}</span>
+      </footer>
     </>
   );
 };
