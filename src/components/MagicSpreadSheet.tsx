@@ -158,7 +158,15 @@ const MagicSpreadSheet: NextPage<Props> = ({ type = "engineer" }) => {
       </div>
       <div>
         {sheetInfo.map((sheet, index) => {
-          return (
+          return index === sheetIndex ? (
+            <Button
+              variant="secondary"
+              name={sheet.gid}
+              onClick={() => handleSheetChange(index)}
+            >
+              {sheet.sheetName}
+            </Button>
+          ) : (
             <Button
               variant="light"
               name={sheet.gid}
