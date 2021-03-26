@@ -38,7 +38,7 @@ export const DownloadButton: React.FC<DownloadData> = ({ fileName, data }: Downl
     let url = (window.URL || window.webkitURL).createObjectURL(blob);
 
     setDownloadInfo([`${fileName}.csv`, url])
-  }, [])
+  }, [data])
 
   return (
     <>
